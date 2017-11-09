@@ -1,0 +1,585 @@
+<html>
+<head>
+	<title>Algorithms</title>
+
+	<meta charset="UTF-8">
+  <meta name="description" content="online equation solver and any base to any base converter">
+  <meta name="keywords" content="online any base to any base converter,online equation solver,rahul gundiya">
+  <meta name="author" content="Rahul gundiya">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+
+	<style type="text/css">
+	#container {
+    height: 400px; 
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 0 auto;
+	}
+
+ table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+} 
+
+ tr:nth-child(even){background-color: #f2f2f2} 
+
+
+
+
+
+	</style>
+</head>
+<body>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+  crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script type="text/javascript">
+	
+		function base_converter() {
+    var nbasefrom = document.getElementById("number").value
+    var basefrom =  document.getElementById("frombase").value
+    var baseto = document.getElementById("tobase").value
+	var SYMBOLS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	if (basefrom<=0 || basefrom>SYMBOLS.length || baseto<=0 || baseto>SYMBOLS.length) {
+		console.log("Base unallowed");
+		return null;
+	}
+	var i, nbaseten=0;
+	if (basefrom!=10) {
+		var sizenbasefrom = nbasefrom.length;
+		for (i=0; i<sizenbasefrom; i++) {
+			var mul, mul_ok=-1;
+			for (mul=0; mul<SYMBOLS.length; mul++) {
+				if (nbasefrom[i]==SYMBOLS[mul]) {
+					mul_ok = 1;
+					break;
+				}
+			}
+			if (mul>=basefrom) {
+				console.log("Symbol unallowed in basefrom");
+				return null;
+			}
+			if (mul_ok==-1) {
+				console.log("Symbol not found");
+				return null;
+			}
+			var exp = (sizenbasefrom-i-1);	
+			if (exp==0) nbaseten += mul;
+			else nbaseten += mul*Math.pow(basefrom, exp);
+		}
+	} else nbaseten = parseInt(nbasefrom);
+	if (baseto!=10) { 
+		var nbaseto = [];
+		while (nbaseten>0) {
+			var mod = nbaseten%baseto;
+			if (mod<0 || mod>=SYMBOLS.length) {
+				console.log("Out of bounds error");
+				return null;
+			}
+			nbaseto.push(SYMBOLS[mod]);
+			nbaseten = parseInt(nbaseten/baseto);
+		}
+		alert( nbaseto.reverse().toString().replace(/,/g, ''));
+	} else {
+		alert( nbaseten.toString());
+	}
+	return "0";
+}
+
+
+</script>
+
+<br/>
+<div class="container">
+  <h2>Converter</h2>
+  <p>convert number of any base to any base</p>
+  <form class="form-inline" action="/action_page.php">
+    <div class="form-group">
+      <label class="sr-only" for="email">Number:</label>
+      <input type="text" class="form-control" id="number" placeholder="Number"  name="Number">
+    </div>
+    
+     <div class="form-group">
+      <label class="sr-only" for="email">From base:</label>
+      <input type="number" class="form-control" id="frombase" placeholder="From base"  name="from base">
+    </div>
+    
+    
+    
+     <div class="form-group">
+      <label class="sr-only" for="email">To base:</label>
+      <input type="number" class="form-control" id="tobase" placeholder="To base"  name="to base">
+    </div>
+    
+    <input type="button"  value = "calculate" class="btn btn-default" onclick = "base_converter()"></input>
+  </form>
+</div>
+<br/>
+<hr>
+<br/>
+<pre>
+ To solve Equation
+ f(x) = 5x^3 - 27x^2 + 60x - 20
+
+ Enter : 5,-27,60,-20  
+</pre>
+<input  type = "text" id = "equation" placeholder = "Comma saparated cofficients" title = "Enter Multipower single variable equation cofficients"></input>
+<input type = "button" id = "cal" value = "Calculate Unknown variable"></input>
+
+<div align = "center">
+	
+	</br>
+
+
+<table id = "myTable" class = ".table-striped"></table>
+
+
+
+
+</div>
+<br>
+<br>
+<div align = "right" id="container1" style="height: 400px"></div>
+<br>
+<br>
+<div align = "left" id="container2" style="height: 400px"></div>
+<br>
+<br>
+<table id = "det" class = ".table-striped"></table>
+<br>
+<br>
+
+
+
+
+<script type="text/javascript">
+
+
+
+
+ $('#cal').click(function() {
+ 	var eq = $("#equation").val().trim()
+ 	//alert(/^[\d\-,]*$/.test(eq))
+ 	//alert(/^[\d]/.test(eq[eq.length-1]))
+ 	//alert(/^[\d]/.test(eq[eq.length-1]))
+ 	//alert(eq.length>2)
+
+ 	var check = true;
+ 	for(var i = 0; i< eq.length-2 ; i++){
+ 		if((eq[i]==eq[i+1])&&(eq[i+1]=='-')||(eq[i]==eq[i+1])&&(eq[i+1]==',')||((eq[i]=='-')&&(eq[i+1]==','))){
+ 			check = false
+ 		}
+ 	}
+ 	if(check&&(/^[\d\-,]*$/.test(eq))&&(/^[\d]/.test(eq[eq.length-1]))&&(/^[\d]/.test(eq[eq.length-1]))&&(
+ 	eq.length>2)){
+ 		plotchart()
+ 	}else{
+ 		
+ 		
+ 		alert("Enter valid comma saparated cofficients!!")
+ 		$("#equation").val('')
+ 	}
+       
+    });
+
+
+
+
+var plotchart = function(){
+	// Horner method for degree-n polynomial
+function eval (a, t) {
+
+    // f(x) = a0+ a1x + ... + anxn
+    var n = a.length - 1;// degree (n)
+    var b = [];
+    var c = [];
+    var i, k;
+    for (i = 0; i <= n; i++)
+        b.push(0), c.push(0);
+    
+    b[n] = a[n];
+    c[n] = b[n];
+  	for (k = n-1; k >= 1; k--) {
+        b[k] = a[k] + t*b[k+1];
+        c[k] = b[k] + t*c[k+1];
+    }
+    b[0] = a[0] + t*b[1];
+
+    return [b[0],c[1]];
+}
+
+// simple Newton
+function Newton (eval, x0, epsilon) {
+    var eps = epsilon || 1e-4;
+ 	var imax = 20;
+    for (var i = 0; i < imax; i++) {
+	    var fdf = eval (coeff, x0);
+        x1 = x0 - fdf[0]/fdf[1];
+        if (Math.abs(x1 - x0) < eps)
+            break;
+        x0 = x1;
+    }
+    return [x1, i];  // return [approx. root, iterations]
+}
+
+// simple bisection
+function bisection (func, interval, eps) {
+    var xLo = interval[0];
+    var xHi = interval[1];
+    
+	fHi = func(coeff,xHi)[0];   // fb
+	fLo = func(coeff,xLo)[0];   // fa
+    if (fLo * fHi > 0)
+        return undefined;
+    
+	var xMid, fHi, fLo, fMid;
+	var iter = 0;
+    while (xHi - xLo > eps) {
+        ++iter;
+		xMid = (xLo+xHi)/2;
+		fMid = func(coeff,xMid)[0];  // fc
+		
+        if (Math.abs(fMid) < eps)
+			return [xMid, iter];
+
+        else if (fMid*fLo < 0) { // fa*fc < 0 --> [a,c]
+			xHi = xMid;
+			fHi = fMid;
+		} else {  // fc*fb < 0 --> [c,b]
+			xLo = xMid;
+			fLo = fMid;
+		}
+	}
+    
+	return [(xLo+xHi)/2, iter];
+}
+
+
+function falseposition (func, interval, eps) {
+    var xLo = interval[0];
+    var xHi = interval[1];
+    
+	fHi = func(coeff,xHi)[0];   // fb
+	fLo = func(coeff,xLo)[0];   // fa
+    if (fLo * fHi > 0)
+        return undefined;
+    
+	var xMid, fHi, fLo, fMid;
+	var iter = 0;
+    while (xHi - xLo > eps) {
+        ++iter;
+		//xMid = (xLo+xHi)/2;
+   	xMid =  ((xLo*func(xHi))-(xHi*func(xLo)))/(func(xHi)-func(xLo))
+		fMid = func(coeff,xMid)[0];  // fc
+		
+        if (Math.abs(fMid) < eps)
+			return [xMid, iter];
+
+        else if (fMid*fLo < 0) { // fa*fc < 0 --> [a,c]
+			xHi = xMid;
+			fHi = fMid;
+		} else {  // fc*fb < 0 --> [c,b]
+			xLo = xMid;
+			fLo = fMid;
+		}
+	}
+    
+	return [(xLo+xHi)/2, iter];
+}
+
+
+
+// f(x) = 5x^3 - 27x^2 + 60x - 20
+//      = 5*(x-0.4)*(x^2 - 5x + 10)
+
+
+
+
+
+//var coeff = [-20,60,-27,5];  
+var coeff = 
+	$("#equation").val().split(',').reverse().map(function(item) {
+    return parseInt(item, 10)
+	});
+
+
+
+
+  
+var t0 = performance.now();
+var sol1 = Newton (eval, 0.5, 1e-4);
+var t1 = performance.now();
+var sol0 = bisection (eval, [0,1], 1e-4);
+var t2 = performance.now();
+var sol2 = bisection (eval, [0,1], 1e-4);
+var t3 = performance.now();
+
+console.log ('Newton time: '+ (t1-t0).toFixed(3) +  ': ' + sol1);
+console.log ('Bisection time: '+ (t2-t1).toFixed(3) + ': ' + sol0);
+console.log ('False position time: '+ (t3-t2).toFixed(3) + ': ' + sol2);
+
+
+
+
+
+
+
+
+
+
+
+
+var abc  = [];
+/*abc.push((t1-t0).toFixed(3)*10)
+abc.push((t2-t1).toFixed(3)*10)
+abc.push((t3-t2).toFixed(3)*10)*/
+
+abc.push(parseFloat((t1-t0).toFixed(3)))
+abc.push(parseFloat((t2-t1).toFixed(3)))
+abc.push(parseFloat((t3-t2).toFixed(3)))
+
+console.log(abc)
+
+
+
+
+
+
+
+
+var node = document.getElementById("myTable");
+while (node.hasChildNodes()) {
+  node.removeChild(node.lastChild);
+}
+
+// Find a <table> element with id="myTable":
+
+
+//var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {};
+var table = document.getElementById("det");
+var row = table.insertRow(0);
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+cell1.innerHTML = "<h3>Parameter name</h3>";
+cell2.innerHTML = "<h3>value</h3>";
+var row = table.insertRow(1);
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+cell1.innerHTML = "Hardware concurrency";
+cell2.innerHTML = navigator.hardwareConcurrency;
+var row = table.insertRow(2);
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+cell1.innerHTML = "jsHeapSizeLimit";
+cell2.innerHTML =performance.memory.jsHeapSizeLimit;
+var row = table.insertRow(2);
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+cell1.innerHTML = "totalJSHeapSize";
+cell2.innerHTML =performance.memory.totalJSHeapSize;
+var row = table.insertRow(2);
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+cell1.innerHTML = "usedJSHeapSize";
+cell2.innerHTML  =performance.memory.usedJSHeapSize;
+
+
+
+
+
+
+var table = document.getElementById("myTable");
+// Create an empty <tr> element and add it to the 1st position of the table:
+
+var row = table.insertRow(0);
+// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+var cell3 = row.insertCell(2);
+var cell4 = row.insertCell(3);
+
+
+
+
+cell1.innerHTML = "<h3>Method name</h3>";
+cell2.innerHTML = "<h3>Solution value</h3>";
+cell3.innerHTML = "<h3>Time(ms)</h3>";
+cell4.innerHTML = "<h3>Iterations</h3>";
+
+
+var row = table.insertRow(1);
+// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+var cell3 = row.insertCell(2);
+var cell4 = row.insertCell(3);
+// Add some text to the new cells:
+cell1.innerHTML = "Newton-raphson";
+cell2.innerHTML = sol1.toString().split(',')[0];
+cell3.innerHTML = (t1-t0).toFixed(3);
+cell4.innerHTML = sol1.toString().split(',')[1];
+var row = table.insertRow(2);
+// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+var cell3 = row.insertCell(2);
+var cell4 = row.insertCell(3);
+// Add some text to the new cells:
+cell1.innerHTML = "Bisection";
+cell2.innerHTML = sol0.toString().split(',')[0];
+cell3.innerHTML = (t2-t1).toFixed(3);
+cell4.innerHTML = sol0.toString().split(',')[1];
+var row = table.insertRow(3);
+// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+var cell1 = row.insertCell(0);
+var cell2 = row.insertCell(1);
+var cell3 = row.insertCell(2);
+var cell4 = row.insertCell(3);
+// Add some text to the new cells:
+cell1.innerHTML = "Regular Falsi";
+cell2.innerHTML = sol2.toString().split(',')[0];
+cell3.innerHTML = (t3-t2).toFixed(3);
+cell4.innerHTML = sol2.toString().split(',')[1];
+
+
+
+
+
+
+Highcharts.chart('container1', {
+    chart: {
+        type: 'column',
+        options3d: {
+            enabled: true,
+            alpha: 10,
+            beta: 25,
+            depth: 70
+        }
+    },
+    title: {
+        text: 'Performance of different algorithms to solve equation'
+    },
+    subtitle: {
+        text: 'Time take in milli seconds'
+    },
+    plotOptions: {
+        column: {
+            depth: 25
+        }
+    },
+    xAxis: {
+    	 title: {
+            text: "Method name"
+        },
+        categories: ['Newton Raphson','bisection ','False position'],
+        labels: {
+            skew3d: true,
+            style: {
+                fontSize: '16px'
+            }
+        }
+    },
+    yAxis: {
+        title: {
+            text: "Time"
+        },
+         min: 0,
+         max: 1,
+         tickInterval: .1
+    },
+    series: [{
+        name: 'Time',
+        data: abc
+    }]
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+Highcharts.chart('container2', {
+    chart: {
+        type: 'column',
+        options3d: {
+            enabled: true,
+            alpha: 18,
+            beta: -21,
+            depth: 81
+        }
+    },
+    title: {
+        text: ''
+    },
+    subtitle: {
+        text: 'Total number of iteration'
+    },
+    plotOptions: {
+        column: {
+            depth: 25
+        }
+    },
+    xAxis: {
+    	 title: {
+            text: "Method name"
+        },
+        categories: ['Newton Raphson','bisection ','False position'],
+        labels: {
+            skew3d: true,
+            style: {
+                fontSize: '16px'
+            }
+        }
+    },
+    yAxis: {
+        title: {
+            text: "Iteration(s)"
+        },
+         min: 0,
+         max: 30,
+         tickInterval: 3
+    },
+    series: [{
+        name: 'Iteration(s)',
+         data: [
+            ['Newton raphson', parseFloat(sol1.toString().split(',')[1])],
+            ['Bisection ', parseFloat(sol0.toString().split(',')[1])],
+            ['False position', parseFloat(sol2.toString().split(',')[1])]
+        ]
+
+    }]
+});
+
+
+}//of function plotchart()
+
+      
+</script>
+
+</body>
+</html>
