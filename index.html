@@ -141,8 +141,8 @@ th, td {
 
  Enter : 5,-27,60,-20  
 </pre>
-<input  type = "text" id = "equation" placeholder = "Comma saparated cofficients" title = "Enter Multipower single variable equation cofficients"></input>
-<input type = "button" id = "cal" value = "Calculate Unknown variable"></input>
+<input  type = "text" id = "equation" placeholder = "Comma saparated cofficients" value = "5,-27,60,-20" title = "Enter Multipower single variable equation cofficients"></input>
+<input type = "button" id = "cal" value = "Calculate Unknown variable" ></input>
 
 <div align = "center">
 	
@@ -362,7 +362,10 @@ console.log(abc)
 
 
 
-
+var node = document.getElementById("det");
+while (node.hasChildNodes()) {
+  node.removeChild(node.lastChild);
+}
 
 
 var node = document.getElementById("myTable");
