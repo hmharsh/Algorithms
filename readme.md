@@ -1,2 +1,2 @@
-## comparision of different equation solving algorithms using Javascript
+## comparison of different Equation solving algorithms using JavaScript
 explore more at: https://hmharsh.github.io/algorithm/
