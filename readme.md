@@ -4,4 +4,4 @@
 - Equation solver for n variables, solve by 3 different algorithms in parallel with a visual comparison of performance 
 
 
-Explore web GUI at: https://hmharsh.github.io/algorithm/
+Explore web GUI at: https://hmharsh.github.io/Algorithms/
